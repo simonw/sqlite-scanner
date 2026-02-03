@@ -13,33 +13,38 @@
 - streams matches immediately as they’re discovered (plain text and pretty JSON)
 - custom `--help` text that describes usage, examples, and notes
 
+## Setup
+
+```bash
+git clone https://github.com/simonw/sqlite-scanner
+cd sqlite-scanner
+```
+
 ## Build
 
 ```bash
-cd ~/dev/sqlite-scanner
 go build -o bin/sqlite-scanner
 ```
-
-That creates `bin/sqlite-scanner`, the same binary you already used earlier.
 
 ## Usage
 
 Simple scan (current directory):
 
 ```bash
-~/dev/sqlite-scanner/bin/sqlite-scanner
+bin/sqlite-scanner
 ```
 
 Scan `/tmp` and `$HOME`:
 
 ```bash
-~/dev/sqlite-scanner/bin/sqlite-scanner /tmp ~
+bin/sqlite-scanner /tmp ~
 ```
 
 Use JSON mode:
 
 ```bash
-~/dev/sqlite-scanner/bin/sqlite-scanner /tmp --json
+bin/sqlite-scanner /tmp --json
+```
 
 Example JSON output shape:
 
@@ -47,28 +52,48 @@ Example JSON output shape:
 {
   "entries": [
     {"path": "/abs/path/to/db1.sqlite"},
-    {"path": "/abs/path/to/db2.sqlite", "size": 12345}
+    {"path": "/abs/path/to/db2.sqlite"}
   ]
 }
-```
 ```
 
 Use newline-delimited JSON to stream objects per line (requires `--size` to include size):
 
 ```bash
-~/dev/sqlite-scanner/bin/sqlite-scanner --jsonl ~/dev
+bin/sqlite-scanner --jsonl ~/dev
+```
+
+Example JSONL output shape (no size):
+
+```jsonl
+{"path": "/abs/path/to/db1.sqlite"}
+{"path": "/abs/path/to/db2.sqlite"}
+```
+
+Example JSONL output shape (with `--size`):
+
+```jsonl
+{"path": "/abs/path/to/db1.sqlite", "size": 12345}
+{"path": "/abs/path/to/db2.sqlite", "size": 67890}
 ```
 
 Include sizes (plain text shows `(size bytes)` and JSON outputs objects) with:
 
 ```bash
-~/dev/sqlite-scanner/bin/sqlite-scanner --size /tmp --json
+bin/sqlite-scanner --size /tmp --json
+```
+
+Example `--size` output (plain text):
+
+```
+/abs/path/to/db1.sqlite (12345 bytes)
+/abs/path/to/db2.sqlite (67890 bytes)
 ```
 
 Check available flags (it prints the detailed help text added earlier; all flags use the `--flag` form):
 
 ```bash
-~/dev/sqlite-scanner/bin/sqlite-scanner --help
+bin/sqlite-scanner --help
 ```
 
 ## Testing
