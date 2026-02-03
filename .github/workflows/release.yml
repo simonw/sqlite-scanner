@@ -76,11 +76,17 @@ jobs:
           version="${GITHUB_REF_NAME#v}"
           dist_bin="dist/sqlite-scanner-linux-amd64/sqlite-scanner"
           "$dist_bin" --version | grep -Fx "$version"
-      - name: Upload release assets
+      - name: Upload release assets (tar.gz)
+        if: matrix.goos != 'windows'
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            dist/*.tar.gz
-            dist/*.zip
+          files: dist/*.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload release assets (zip)
+        if: matrix.goos == 'windows'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
