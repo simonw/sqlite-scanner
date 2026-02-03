@@ -1,0 +1,8 @@
+bin/
+*.exe
+*.log
+*.tmp
+*.test
+.DS_Store
+.idea/
+*.swp
