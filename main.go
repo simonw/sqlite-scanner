@@ -16,6 +16,7 @@ import (
 )
 
 var sqliteMagic = []byte("SQLite format 3\x00")
+var version = "dev"
 
 type matchResult struct {
 	Path string
@@ -28,6 +29,7 @@ func main() {
 	jsonOutput := pflag.Bool("json", false, "print matches as a JSON object with an entries array")
 	size := pflag.Bool("size", false, "include the file size (bytes) in the output")
 	jsonl := pflag.Bool("jsonl", false, "emit newline-delimited JSON objects")
+	versionFlag := pflag.Bool("version", false, "print version and exit")
 
 	pflag.Usage = func() {
 		out := os.Stdout
@@ -57,6 +59,11 @@ func main() {
 	}
 
 	pflag.Parse()
+
+	if *versionFlag {
+		fmt.Println(version)
+		return
+	}
 
 	positions := pflag.Args()
 	roots := positions

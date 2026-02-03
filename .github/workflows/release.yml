@@ -1,0 +1,86 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: darwin
+            goarch: amd64
+          - goos: darwin
+            goarch: arm64
+          - goos: linux
+            goarch: amd64
+          - goos: linux
+            goarch: arm64
+          - goos: windows
+            goarch: amd64
+          - goos: windows
+            goarch: arm64
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Go 1.23
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.23.x'
+      - name: Build binaries
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          GOARM: ${{ matrix.goarm }}
+          CGO_ENABLED: '0'
+        run: |
+          set -euo pipefail
+
+          binary=sqlite-scanner
+          ext=""
+          if [ "$GOOS" = "windows" ]; then
+            ext=".exe"
+          elif [ "$GOOS" = "js" ] || [ "$GOOS" = "wasip1" ]; then
+            ext=".wasm"
+          fi
+
+          suffix="$GOOS-$GOARCH"
+          if [ -n "$GOARM" ]; then
+            suffix="${suffix}v${GOARM}"
+          fi
+
+          version="${GITHUB_REF_NAME#v}"
+          outdir="dist/${binary}-${suffix}"
+          mkdir -p "$outdir"
+
+          env GOOS="$GOOS" GOARCH="$GOARCH" GOARM="$GOARM" CGO_ENABLED=0 \
+            go build -trimpath -ldflags "-s -w -X main.version=${version}" -o "$outdir/${binary}${ext}" .
+
+          if [ "$GOOS" = "windows" ]; then
+            (cd "$outdir" && zip -9 "../${binary}-${suffix}.zip" "${binary}${ext}")
+          else
+            tar -C "$outdir" -czf "dist/${binary}-${suffix}.tar.gz" "${binary}${ext}"
+          fi
+      - name: Check version flag
+        if: matrix.goos == 'linux' && matrix.goarch == 'amd64'
+        run: |
+          set -euo pipefail
+          uname -m
+          version="${GITHUB_REF_NAME#v}"
+          dist_bin="dist/sqlite-scanner-linux-amd64/sqlite-scanner"
+          "$dist_bin" --version | grep -Fx "$version"
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.tar.gz
+            dist/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
