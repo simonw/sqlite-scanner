@@ -1,4 +1,4 @@
-module sqlite-scanner
+module github.com/simonw/sqlite-scanner
 
 go 1.23
 
