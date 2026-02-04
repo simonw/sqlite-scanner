@@ -31,12 +31,16 @@ The package is also [available on PyPI](https://pypi.org/project/sqlite-scanner/
 uvx sqlite-scanner /path/to/scan
 ```
 
-Or install it permanently with:
+### Install with pip
+
+```bash
+pip install sqlite-scanner
+```
+
+Or with uv:
 
 ```bash
 uv tool install sqlite-scanner
-# or
-pip install sqlite-scanner
 ```
 
 ### Install with Go
