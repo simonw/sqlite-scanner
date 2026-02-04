@@ -13,17 +13,48 @@
 - streams matches immediately as they’re discovered (plain text and pretty JSON)
 - custom `--help` text that describes usage, examples, and notes
 
-## Setup
+## Installation
+
+### Run without installing (Go)
+
+If you have Go installed, you can run it directly without cloning anything:
+
+```bash
+go run github.com/simonw/sqlite-scanner@latest /path/to/scan
+```
+
+### Run without installing (Python)
+
+The package is also [available on PyPI](https://pypi.org/project/sqlite-scanner/). If you have [uv](https://docs.astral.sh/uv/) installed:
+
+```bash
+uvx sqlite-scanner /path/to/scan
+```
+
+Or install it permanently with:
+
+```bash
+uv tool install sqlite-scanner
+# or
+pip install sqlite-scanner
+```
+
+### Install with Go
+
+```bash
+go install github.com/simonw/sqlite-scanner@latest
+```
+
+### Download a binary
+
+Pre-built binaries for macOS, Linux, and Windows are available on the [releases page](https://github.com/simonw/sqlite-scanner/releases).
+
+### Build from source
 
 ```bash
 git clone https://github.com/simonw/sqlite-scanner
 cd sqlite-scanner
-```
-
-## Build
-
-```bash
-go build -o bin/sqlite-scanner
+go build -o sqlite-scanner
 ```
 
 ## Usage
@@ -31,19 +62,19 @@ go build -o bin/sqlite-scanner
 Simple scan (current directory):
 
 ```bash
-bin/sqlite-scanner
+sqlite-scanner
 ```
 
 Scan `/tmp` and `$HOME`:
 
 ```bash
-bin/sqlite-scanner /tmp ~
+sqlite-scanner /tmp ~
 ```
 
 Use JSON mode:
 
 ```bash
-bin/sqlite-scanner /tmp --json
+sqlite-scanner /tmp --json
 ```
 
 Example JSON output shape:
@@ -60,7 +91,7 @@ Example JSON output shape:
 Use newline-delimited JSON to stream objects per line (requires `--size` to include size):
 
 ```bash
-bin/sqlite-scanner --jsonl ~/dev
+sqlite-scanner --jsonl ~/dev
 ```
 
 Example JSONL output shape (no size):
@@ -80,7 +111,7 @@ Example JSONL output shape (with `--size`):
 Include sizes (plain text shows `(size bytes)` and JSON outputs objects) with:
 
 ```bash
-bin/sqlite-scanner --size /tmp --json
+sqlite-scanner --size /tmp --json
 ```
 
 Example `--size` output (plain text):
@@ -93,7 +124,7 @@ Example `--size` output (plain text):
 Check available flags (it prints the detailed help text added earlier; all flags use the `--flag` form):
 
 ```bash
-bin/sqlite-scanner --help
+sqlite-scanner --help
 ```
 
 ## Testing
