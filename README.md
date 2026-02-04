@@ -49,6 +49,8 @@ go install github.com/simonw/sqlite-scanner@latest
 
 Pre-built binaries for macOS, Linux, and Windows are available on the [releases page](https://github.com/simonw/sqlite-scanner/releases).
 
+On macOS, the downloaded binary may be blocked by Gatekeeper. Follow [Apple's instructions for opening apps from unidentified developers](https://support.apple.com/en-us/102445) to allow it to run.
+
 ### Build from source
 
 ```bash
