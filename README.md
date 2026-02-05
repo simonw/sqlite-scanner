@@ -31,6 +31,14 @@ The package is also [available on PyPI](https://pypi.org/project/sqlite-scanner/
 uvx sqlite-scanner /path/to/scan
 ```
 
+### Run without installing (Conda)
+
+The package is also [available on conda-forge](https://prefix.dev/channels/conda-forge/packages/sqlite-scanner). If you have [pixi](https://pixi.sh) installed:
+
+```bash
+pixi exec sqlite-scanner /path/to/scan
+```
+
 ### Install with pip
 
 ```bash
@@ -41,6 +49,12 @@ Or with uv:
 
 ```bash
 uv tool install sqlite-scanner
+```
+
+### Install with pixi
+
+```bash
+pixi global install sqlite-scanner
 ```
 
 ### Install with Go
